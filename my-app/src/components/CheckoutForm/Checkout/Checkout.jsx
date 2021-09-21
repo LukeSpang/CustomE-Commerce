@@ -92,4 +92,4 @@ const Checkout = ({ cart, onCaptureCheckout, order, error }) => {
   );
 };
 
-export default Checkout;
+export default Checkout; 
