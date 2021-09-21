@@ -9,17 +9,14 @@ const { control } = useFormContext();
 
 return (
    <>
-         <Controller
-            control={control}
-            name={name}
-            render = {({ field})=> (
-                <TextField
-                    fullWidth
-                    label={label}
-                    required
-                />
-            )}
-         />
+       <Controller
+        render={({ field }) => (
+          <TextField {...field} fullWidth label={label} required={required} />
+        )}
+        control={control}
+        name={name}
+        defaultValue=""
+ />
    </>
  );
  }
