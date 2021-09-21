@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { CssBaseline } from '@material-ui/core';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import { Navbar, Products, Cart } from './components';
+import { Navbar, Products, Cart, Checkout } from './components';
 import { commerce } from './lib/commerce';
 
 const App = () => {
@@ -40,7 +40,7 @@ const App = () => {
     setCart(response.cart);
   };
 
-  const handleEmptyCart = async () => {
+  const handleEmptyCart = async (lineItemId) => {
     const response = await commerce.cart.empty();
 
     setCart(response.cart);
@@ -52,17 +52,17 @@ const App = () => {
     setCart(newCart);
   };
 
-//   const handleCaptureCheckout = async (checkoutTokenId, newOrder) => {
-//     try {
-//       const incomingOrder = await commerce.checkout.capture(checkoutTokenId, newOrder);
+  const handleCaptureCheckout = async (checkoutTokenId, newOrder) => {
+    try {
+      const incomingOrder = await commerce.checkout.capture(checkoutTokenId, newOrder);
 
-//       setOrder(incomingOrder);
+      setOrder(incomingOrder);
 
-//       refreshCart();
-//     } catch (error) {
-//       setErrorMessage(error.data.error.message);
-//     }
-//   };
+      refreshCart();
+    } catch (error) {
+      setErrorMessage(error.data.error.message);
+    }
+  };
 
   useEffect(() => {
     fetchProducts();
@@ -73,20 +73,23 @@ const App = () => {
 
   return (
     <Router>
-      <div style={{ display: 'flex' }}>
-        <CssBaseline />
-        <Navbar totalItems={cart.total_items} handleDrawerToggle={handleDrawerToggle} />
-        <Switch>
-          <Route exact path="/">
-            <Products products={products} onAddToCart={handleAddToCart} handleUpdateCartQty />
-          </Route>
-          <Route exact path="/cart">
-            <Cart cart={cart} onUpdateCartQty={handleUpdateCartQty} onRemoveFromCart={handleRemoveFromCart} onEmptyCart={handleEmptyCart} />
-          </Route>
-        
-        </Switch>
-      </div>
-    </Router>
+    <div style={{ display: 'flex' }}>
+      <CssBaseline />
+      <Navbar totalItems={cart.total_items} handleDrawerToggle={handleDrawerToggle} />
+      <Switch>
+        <Route exact path="/">
+          <Products products={products} onAddToCart={handleAddToCart} handleUpdateCartQty />
+        </Route>
+        <Route exact path="/cart">
+          <Cart cart={cart} onUpdateCartQty={handleUpdateCartQty} onRemoveFromCart={handleRemoveFromCart} onEmptyCart={handleEmptyCart} />
+        </Route>
+        <Route path="/checkout" exact>
+          <Checkout cart={cart} order={order} onCaptureCheckout={handleCaptureCheckout} error={errorMessage} />
+        </Route>
+      </Switch>
+    </div>
+    
+  </Router>
   );
 };
 
