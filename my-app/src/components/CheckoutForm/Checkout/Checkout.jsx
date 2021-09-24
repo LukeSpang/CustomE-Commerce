@@ -44,7 +44,7 @@ const Checkout = ({ cart, onCaptureCheckout, order, error }) => {
   let Confirmation = () => (order.customer ? (
     <>
       <div>
-        <Typography variant="h5">What a great order! You won't be disappointed  {order.customer.firstname} {order.customer.lastname}!</Typography>
+        <Typography variant="h5">What a great order! You won't be disappointed, {order.customer.firstname} {order.customer.lastname}!</Typography>
         <Divider className={classes.divider} />
         <Typography variant="subtitle2">Order ref: {order.customer_reference}</Typography>
       </div>
